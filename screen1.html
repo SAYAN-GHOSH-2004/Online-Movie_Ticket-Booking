@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Multiplex Seat Selection - Multiple Screens</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f0f0f0;
+    }
+
+    .screen {
+      background: #ccc;
+      height: 40px;
+      width: 80%;
+      margin: 20px auto;
+      border-radius: 5px;
+      line-height: 40px;
+      font-weight: bold;
+    }
+
+    .seats {
+      display: grid;
+      grid-template-columns: repeat(10, 50px);
+      gap: 10px;
+      justify-content: center;
+      margin: 20px auto;
+      width: fit-content;
+    }
+
+    .seat {
+      background: #ddd;
+      border: 1px solid #999;
+      border-radius: 5px;
+      height: 50px;
+      width: 50px;
+      cursor: pointer;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .seat.selected {
+      background: #6c6;
+    }
+
+    .seat.occupied {
+      background: #f66;
+      cursor: not-allowed;
+    }
+
+    .legend {
+      margin-top: 20px;
+    }
+
+    .legend span {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      margin: 0 5px;
+      vertical-align: middle;
+    }
+
+    .legend .available { background: #ddd; }
+    .legend .selected { background: #6c6; }
+    .legend .occupied { background: #f66; }
+
+    .layout {
+      margin-bottom: 50px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Multiplex Booking</h2>
+
+  <div class="layout">
+    <h3>Screen 1</h3>
+    <div class="screen">Screen</div>
+    <div class="seats" id="seats1"></div>
+  </div>
+
+  <div class="layout">
+    <h3>Screen 2</h3>
+    <div class="screen">Screen</div>
+    <div class="seats" id="seats2"></div>
+  </div>
+
+  <div class="legend">
+    <span class="available"></span> Available
+    <span class="selected"></span> Selected
+    <span class="occupied"></span> Occupied
+  </div>
+
+  <script>
+    function createSeats(containerId, rows, cols, occupiedSeats = []) {
+      const container = document.getElementById(containerId);
+
+      for (let row = 0; row < rows; row++) {
+        const rowLetter = String.fromCharCode(65 + row);
+        for (let col = 1; col <= cols; col++) {
+          const seatLabel = rowLetter + col;
+          const seat = document.createElement('div');
+          seat.classList.add('seat');
+          seat.textContent = seatLabel;
+
+          if (occupiedSeats.includes(seatLabel)) {
+            seat.classList.add('occupied');
+          }
+
+          seat.addEventListener('click', () => {
+            if (!seat.classList.contains('occupied')) {
+              seat.classList.toggle('selected');
+            }
+          });
+
+          container.appendChild(seat);
+        }
+      }
+    }
+    createSeats("seats1", 5, 10, ["A1", "B5", "C7"]);
+    createSeats("seats2", 5, 10, ["A3", "D9", "E10"]);
+  </script>
+
+</body>
+</html>
